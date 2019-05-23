@@ -1,0 +1,14 @@
+{
+  "name": "demo",
+  "description": "Express Gateway Instance Bootstraped from Command Line",
+  "repository": {},
+  "license": "UNLICENSED",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "example": "0.0.0",
+    "express-gateway": "^1.16.3",
+    "request-promise-native": "^1.0.7",
+    "cad-gateway-oauth-plugin": "^0.0"
+  }
+}

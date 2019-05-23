@@ -1,0 +1,90 @@
+http:
+  port: 8081
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  api:
+    host: localhost
+    paths: '/ip'
+  grads:
+    host: localhost
+    paths: /grads
+  a:
+    host: localhost
+    paths: /a
+  b:
+    host: localhost
+    paths: /b
+serviceEndpoints:
+  httpbin:
+    url: 'https://httpbin.org'
+  grads:
+    url: 'http://localhost:8080/grads-resource/'
+  thingA:
+    url: 'http://localhost:9002/'
+  thingB:
+    url: 'http://localhost:9003/'
+policies:
+  - testpolicy
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+  - jwt
+pipelines:
+  grads_pipline:
+    apiEndpoints:
+      - grads
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - testpolicy:
+          - action: 
+      # - jwt: # secure API with key auth
+      #     - action:
+      #         checkCredentialExistence: false
+      #         secretOrPublicKeyFile: '../demo/config/public.pem'
+      # - jwtScopes:
+      #     - action:
+      - proxy:
+          - action:
+              serviceEndpoint: grads 
+              changeOrigin: true
+  pipelineA:   #load testing to resource A, this will return a blub data
+    apiEndpoints:
+      - a
+    policies:
+      - testpolicy:
+          - action: 
+      - proxy:
+          - action:
+              serviceEndpoint: thingA 
+              changeOrigin: true
+  pipelineB:   #load testing to resource B, this will return a blub data
+    apiEndpoints:
+      - b
+    policies:
+      - testpolicy:
+          - action: 
+      - proxy:
+          - action:
+              serviceEndpoint: thingB 
+              changeOrigin: true
+  pipeline_2:
+    apiEndpoints:
+      - api
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - testpolicy:
+          - action: 
+            baseUrl: 'https://example.com'
+      - proxy:
+          - action:
+              serviceEndpoint: httpbin 
+              changeOrigin: true
